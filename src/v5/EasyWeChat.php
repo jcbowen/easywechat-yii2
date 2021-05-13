@@ -2,7 +2,7 @@
 
 namespace jcbowen\yiieasywechat\v5;
 
-use Agent;
+use jcbowen\yiieasywechat\components\Agent;
 use yii\base\Component;
 use EasyWeChat\Factory;
 

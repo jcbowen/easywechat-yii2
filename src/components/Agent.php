@@ -1,6 +1,14 @@
 <?php
 
-// 接口输出类
+namespace jcbowen\yiieasywechat\components;
+
+/**
+ *
+ * Class Agent
+ * @author Bowen
+ * @email bowen@jiuchet.com
+ * @lastTime 2021/5/13 11:27 下午
+ */
 class Agent
 {
     // 设备类型
