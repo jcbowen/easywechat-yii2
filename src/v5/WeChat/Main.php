@@ -19,32 +19,36 @@ class Main extends Component
 {
     /**
      * 微信SDK
-     * @var null
+     * @var Application
      */
-    public static $_app = null;
+    public static Application $_app;
 
     /**
      * @var User
      */
-    private static $_user;
+    private static User $_user;
 
     /**
      * 存放用户信息session的key
      * @var string
      */
-    private $SessionKeyUser;
+    public string $SessionKeyUser = '_EasyWechatUser';
 
-    public function __construct($SessionKeyUser = '_EasyWechatUser', $rebinds = [], $config = [])
+    /**
+     * @var array
+     */
+    public array $rebinds = [];
+
+    public function init()
     {
-        parent::__construct($config);
-        $this->SessionKeyUser = $SessionKeyUser;
+        parent::init();
 
         if (!self::$_app instanceof Application) {
             self::$_app = Factory::officialAccount(Yii::$app->params['WeChatConfig']);
 
-            if (!empty($rebinds)) {
+            if (!empty($this->rebinds)) {
                 $app = self::$_app;
-                foreach ($rebinds as $key => $class) $app->rebind($key, new $class());
+                foreach ($this->rebinds as $key => $class) $app->rebind($key, new $class());
                 self::$_app = $app;
             }
         }

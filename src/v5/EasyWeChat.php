@@ -28,33 +28,31 @@ class EasyWeChat extends Component
      * 存放用户信息session的key
      * @var string
      */
-    public $SessionKeyUser = '_EasyWechatUser';
+    public string $SessionKeyUser = '_EasyWechatUser';
 
     /**
      * @var array
      */
-    public $rebinds = [];
+    public array $rebinds = [];
 
     /**
      * 浏览器类型
      * @var string
      */
-    public $container = 'unknown';
+    public string $container = 'unknown';
 
     /**
-     * 实力化应用SDK
+     * 实例化应用SDK
      *
      * @var Factory
      */
-    private static $_app;
+    private static Factory $_app;
 
-    private $_config = [];
-
-    public function __construct($config = [])
+    public function init()
     {
         global $_B;
-        $this->_config = $config;
-        parent::__construct($config);
+
+        parent::init();
 
         $browserType = Agent::browserType();
         if (Agent::MICRO_MESSAGE_WORK_YES == Agent::isMicroMessage()) {
@@ -118,7 +116,9 @@ class EasyWeChat extends Component
 //                case 'WxWork':
                     $nameSpace = '\jcbowen\yiieasywechat\v5\%s\Main';
                     $nameSpace = sprintf($nameSpace, $this->container);
-                    self::$_app = new $nameSpace($this->SessionKeyUser, $this->rebinds, $this->_config);
+                    self::$_app = new $nameSpace();
+                    self::$_app->SessionKeyUser = $this->SessionKeyUser;
+                    self::$_app->rebinds = $this->rebinds;
                     break;
                 default:
                     break;
