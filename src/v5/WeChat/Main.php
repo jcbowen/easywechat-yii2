@@ -35,6 +35,11 @@ class Main extends Component
     public string $SessionKeyUser = '_EasyWechatUser';
 
     /**
+     * @var string
+     */
+    public string $returnUrlParam = '_WeChatReturnUrl';
+
+    /**
      * @var array
      */
     public array $rebinds = [];
