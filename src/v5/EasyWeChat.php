@@ -46,7 +46,7 @@ class EasyWeChat extends Component
      *
      * @var Factory
      */
-    private static Factory $_app;
+    private static $_app = 'not init';
 
     public function init()
     {
