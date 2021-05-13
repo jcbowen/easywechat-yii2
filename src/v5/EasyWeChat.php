@@ -2,6 +2,7 @@
 
 namespace jcbowen\yiieasywechat\v5;
 
+use Exception;
 use jcbowen\yiieasywechat\components\Agent;
 use yii\base\Component;
 use EasyWeChat\Factory;
@@ -46,7 +47,7 @@ class EasyWeChat extends Component
      *
      * @var Factory
      */
-    private static $_app = 'not init';
+    private static $_app = 'Not Init';
 
     public function init()
     {
@@ -110,7 +111,7 @@ class EasyWeChat extends Component
      */
     public function getApp()
     {
-        if (!self::$_app) {
+        if (!self::$_app || self::$_app === 'Not Init') {
             switch ($this->container) {
                 case 'WeChat':
 //                case 'WxWork':
@@ -133,7 +134,7 @@ class EasyWeChat extends Component
      * @param string $name
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      * @author Bowen
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 8:22 下午
@@ -143,7 +144,7 @@ class EasyWeChat extends Component
     {
         try {
             return parent::__get($name);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e->getPrevious();
         }
     }

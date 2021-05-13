@@ -21,7 +21,7 @@ class Main extends Component
      * 微信SDK
      * @var Application
      */
-    public static Application $_app;
+    public static $_app = 'Not Init';
 
     /**
      * @var User
