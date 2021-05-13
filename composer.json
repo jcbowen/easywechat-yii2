@@ -1,0 +1,37 @@
+{
+    "name": "jcbowen/yii-easywechat",
+    "description": "WeChat SDK for Yii2 , 基于 overtrue/wechat 5.x",
+    "keywords": ["yii2", "wechat", "easywechat", "php", "jcbowen"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bowen",
+            "email": "bowen@jiuchet.com"
+        }
+    ],
+    "type": "yii2-extension",
+    "require": {
+        "php": ">=7.4",
+        "yiisoft/yii2": "*",
+        "overtrue/wechat": "~5.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "jcbowen\\yiieasywechat\\": "./src"
+        }
+    },
+    "repositories": {
+		"packagist": {
+			"type": "composer",
+			"url": "https://packagist.phpcomposer.com"
+		},
+		"0": {
+			"type": "composer",
+			"url": "https://packagist.org"
+		},
+		"1": {
+			"type": "composer",
+			"url": "https://packagist.phpcomposer.com"
+		}
+    }
+}
