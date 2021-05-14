@@ -114,7 +114,7 @@ class Main extends Component
      */
     public function setReturnUrl($url)
     {
-        Yii::$app->session->set($this->returnUrlParam, $url);
+        Yii::$app->session->set($this->SessionKeyReturnUrl, $url);
     }
 
     /**
@@ -123,7 +123,7 @@ class Main extends Component
      */
     public function getReturnUrl($defaultUrl = null)
     {
-        $url = Yii::$app->session->get($this->returnUrlParam, $defaultUrl);
+        $url = Yii::$app->session->get($this->SessionKeyReturnUrl, $defaultUrl);
         if (is_array($url)) {
             if (isset($url[0])) {
                 return Yii::$app->getUrlManager()->createUrl($url);

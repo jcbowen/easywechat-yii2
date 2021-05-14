@@ -31,6 +31,8 @@ class EasyWeChat extends Component
      */
     public string $SessionKeyUser = '_EasyWechatUser';
 
+    public $SessionKeyReturnUrl = '_EasyWechatReturnUrl';
+
     /**
      * @var array
      */
@@ -119,6 +121,7 @@ class EasyWeChat extends Component
                     $nameSpace = sprintf($nameSpace, $this->container);
                     self::$_app = new $nameSpace();
                     self::$_app->SessionKeyUser = $this->SessionKeyUser;
+                    self::$_app->SessionKeyReturnUrl = $this->SessionKeyReturnUrl;
                     self::$_app->rebinds = $this->rebinds;
                     break;
                 default:
