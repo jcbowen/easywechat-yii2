@@ -5,7 +5,6 @@ namespace jcbowen\yiieasywechat\v5;
 use Exception;
 use jcbowen\yiieasywechat\components\Agent;
 use yii\base\Component;
-use EasyWeChat\Factory;
 
 /**
  *
@@ -31,7 +30,10 @@ class EasyWeChat extends Component
      */
     public string $SessionKeyUser = '_EasyWechatUser';
 
-    public $SessionKeyReturnUrl = '_EasyWechatReturnUrl';
+    /**
+     * @var string
+     */
+    public string $SessionKeyReturnUrl = '_EasyWechatReturnUrl';
 
     /**
      * @var array
@@ -47,7 +49,8 @@ class EasyWeChat extends Component
     /**
      * 实例化应用SDK
      *
-     * @var Factory
+     * @var \jcbowen\yiieasywechat\v5\WeChat\Main
+     * @var \jcbowen\yiieasywechat\v5\WxWork\Main
      */
     private static $_app = 'Not Init';
 
@@ -86,7 +89,7 @@ class EasyWeChat extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 8:03 下午
      */
-    public function getIsWechat()
+    public function getIsWechat(): bool
     {
         return $this->container === 'WeChat';
     }
@@ -99,7 +102,7 @@ class EasyWeChat extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 8:03 下午
      */
-    public function getIsWxwork()
+    public function getIsWxwork(): bool
     {
         return $this->container === 'WxWork';
     }
@@ -109,7 +112,7 @@ class EasyWeChat extends Component
      * 获取EasyWeChat实例
      * （目前仅支持WeChat获取）
      *
-     * @return Factory
+     * @return \jcbowen\yiieasywechat\v5\WeChat\Main|\jcbowen\yiieasywechat\v5\WxWork\Main
      */
     public function getApp()
     {
@@ -119,10 +122,14 @@ class EasyWeChat extends Component
 //                case 'WxWork':
                     $nameSpace = '\jcbowen\yiieasywechat\v5\%s\Main';
                     $nameSpace = sprintf($nameSpace, $this->container);
-                    self::$_app = new $nameSpace();
-                    self::$_app->SessionKeyUser = $this->SessionKeyUser;
-                    self::$_app->SessionKeyReturnUrl = $this->SessionKeyReturnUrl;
-                    self::$_app->rebinds = $this->rebinds;
+                    self::$_app = new $nameSpace([
+                        'SessionKeyUser'      => $this->SessionKeyUser,
+                        'SessionKeyReturnUrl' => $this->SessionKeyReturnUrl,
+                        'rebinds'             => $this->rebinds,
+                    ]);
+//                    self::$_app->SessionKeyUser = $this->SessionKeyUser;
+//                    self::$_app->SessionKeyReturnUrl = $this->SessionKeyReturnUrl;
+//                    self::$_app->rebinds = $this->rebinds;
                     break;
                 default:
                     break;

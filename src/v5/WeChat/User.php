@@ -4,7 +4,6 @@ namespace jcbowen\yiieasywechat\v5\WeChat;
 
 use yii\base\Component;
 
-
 /**
  *
  * Class WechatUser
@@ -18,41 +17,52 @@ class User extends Component
     /**
      * @var string
      */
-    public $id;
+    public string $id;
+
     /**
      * @var string
      */
-    public $nickname;
+    public string $name;
+
     /**
      * @var string
      */
-    public $name;
+    public string $nickname;
+
     /**
      * @var string
      */
-    public $email;
+    public string $avatar;
+
     /**
-     * @var string
+     * @var string|null
      */
-    public $avatar;
+    public ?string $email;
+
     /**
      * @var array
      */
-    public $original;
-    /**
-     * @var \Overtrue\Socialite\AccessToken
-     */
-    public $token;
+    public array $raw;
+
     /**
      * @var string
      */
-    public $provider;
+    public string $access_token;
+
+    /**
+     * @var string
+     */
+    public string $refresh_token;
+    /**
+     * @var int
+     */
+    public int $expires_in;
 
     /**
      * @return string
      */
-    public function getOpenId()
+    public function getOpenId(): string
     {
-        return isset($this->original['openid']) ? $this->original['openid'] : '';
+        return isset($this->raw['openid']) ? $this->raw['openid'] : '';
     }
 }

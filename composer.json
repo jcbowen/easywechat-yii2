@@ -21,8 +21,9 @@
 	"require": {
 		"php": ">=7.4",
 		"yiisoft/yii2": "^2.0.4",
-		"overtrue/wechat": "~5.5.0"
-	},
+		"overtrue/wechat": "~5.5.0",
+        "ext-json": "*"
+    },
 	"autoload": {
 		"psr-4": {
 			"jcbowen\\yiieasywechat\\": "./src"
