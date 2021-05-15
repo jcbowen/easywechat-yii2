@@ -8,6 +8,7 @@ use EasyWeChat\Factory;
 use EasyWeChat\OfficialAccount\Application;
 
 /**
+ * 微信公众号 封装方法
  *
  * Class Main
  * @author Bowen
@@ -87,7 +88,7 @@ class Main extends Component
     }
 
     /**
-     * 发起授权请求
+     * 处理网页授权
      *
      * @return Yii\web\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -111,13 +112,13 @@ class Main extends Component
     }
 
     /**
+     * 将获取到的信息保存到session中，并跳转到设置的回调url中
      *
      * @param \Overtrue\Socialite\User $user
      * @return \yii\web\Response
      * @lasttime: 2021/5/15 12:01 上午
      * @author Bowen
      * @email bowen@jiuchet.com
-     *
      */
     public function authorize(\Overtrue\Socialite\User $user): \yii\web\Response
     {
@@ -126,7 +127,12 @@ class Main extends Component
     }
 
     /**
+     * 储存回调url
+     *
      * @param string|array $url
+     * @lasttime: 2021/5/15 10:02 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
      */
     public function setReturnUrl($url)
     {
@@ -134,6 +140,7 @@ class Main extends Component
     }
 
     /**
+     * 获取并输出回调URL
      *
      * @param null $defaultUrl
      * @return mixed|string
