@@ -4,6 +4,7 @@ namespace jcbowen\yiieasywechat\v5;
 
 use Exception;
 use jcbowen\yiieasywechat\components\Agent;
+use Yii;
 use yii\base\Component;
 
 /**
@@ -14,13 +15,13 @@ use yii\base\Component;
  * @lastTime 2021/5/13 4:48 下午
  * @package jcbowen\yiieasywechat
  *
- * @property \EasyWeChat\OfficialAccount\Application $wechat 微信实例
- * @property \EasyWeChat\Payment\Application $wxpay 微信支付实例
- * @property \EasyWeChat\MiniProgram\Application $miniProgram 微信小程序实例
- * @property \EasyWeChat\OpenPlatform\Application $openPlatform 微信开放平台实例
- * @property \EasyWeChat\Work\Application $wxWork 企业微信实例
- * @property \EasyWeChat\OpenWork\Application $openWork 企业微信开放平台实例
- * @property \EasyWeChat\MicroMerchant\Application $microMerchant 小微商户实例
+ * @property \EasyWeChat\OfficialAccount\Application $WeChat 微信实例
+ * @property \EasyWeChat\Payment\Application $WeChatPay 微信支付实例
+ * @property \EasyWeChat\MiniProgram\Application $WeChatMiniProgram 微信小程序实例
+ * @property \EasyWeChat\OpenPlatform\Application $WeChatOpenPlatform 微信开放平台实例
+ * @property \EasyWeChat\Work\Application $WxWork 企业微信实例
+ * @property \EasyWeChat\OpenWork\Application $WeChatOpenWork 企业微信开放平台实例
+ * @property \EasyWeChat\MicroMerchant\Application $WeChatMicroMerchant 小微商户实例
  */
 class EasyWeChat extends Component
 {
@@ -78,7 +79,7 @@ class EasyWeChat extends Component
         }
         $this->container = $_B['container'];
 
-        $this->getApp();
+        $_B['EasyWeChat']['configs'] = $this->getConfig();
     }
 
     /**
@@ -91,7 +92,8 @@ class EasyWeChat extends Component
      */
     public function getIsWechat(): bool
     {
-        return $this->container === 'WeChat';
+        global $_B;
+        return $_B['isWechat'] = $this->container === 'WeChat';
     }
 
     /**
@@ -104,40 +106,96 @@ class EasyWeChat extends Component
      */
     public function getIsWxwork(): bool
     {
-        return $this->container === 'WxWork';
+        global $_B;
+        return $_B['isWxwork'] = $this->container === 'WxWork';
     }
 
+    /**
+     * 判断客户端是否为微信系浏览器
+     *
+     * @return bool
+     * @lasttime: 2021/5/15 2:11 下午
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     * s     */
+    public function getIsMicroMessage(): bool
+    {
+        global $_B;
+        return $_B['isMicroMessage'] = ($this->getIsWechat() || $this->getIsWxwork());
+    }
 
     /**
-     * 获取EasyWeChat实例
-     * （目前仅支持WeChat获取）
+     * 获取EasyWeChat 页面类实例
      *
-     * @return \jcbowen\yiieasywechat\v5\WeChat\Main|\jcbowen\yiieasywechat\v5\WxWork\Main
+     * @return \jcbowen\yiieasywechat\v5\WeChat\Main|\jcbowen\yiieasywechat\v5\WxWork\Main|bool
      */
-    public function getApp()
+    public function getApp($appName = '')
     {
+        $appName = $appName ? $appName : $this->container;
         if (!self::$_app || self::$_app === 'Not Init') {
-            switch ($this->container) {
+            switch ($appName) {
                 case 'WeChat':
-//                case 'WxWork':
+                case 'WxWork':
                     $nameSpace = '\jcbowen\yiieasywechat\v5\%s\Main';
-                    $nameSpace = sprintf($nameSpace, $this->container);
+                    $nameSpace = sprintf($nameSpace, $appName);
                     self::$_app = new $nameSpace([
                         'SessionKeyUser'      => $this->SessionKeyUser,
                         'SessionKeyReturnUrl' => $this->SessionKeyReturnUrl,
                         'rebinds'             => $this->rebinds,
                     ]);
-//                    self::$_app->SessionKeyUser = $this->SessionKeyUser;
-//                    self::$_app->SessionKeyReturnUrl = $this->SessionKeyReturnUrl;
-//                    self::$_app->rebinds = $this->rebinds;
                     break;
                 default:
-                    break;
+                    self::$_app = null;
             }
         }
-        return self::$_app;
+        return self::$_app ? self::$_app : false;
     }
 
+    /**
+     * 获取配置信息
+     *
+     * @return array[]
+     * @lasttime: 2021/5/15 4:36 下午
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     */
+    private function getConfig(): array
+    {
+        $checkArr = [
+            'WeChat'              => [// 微信公众号
+                'checkKey' => 'secret',
+            ],
+            'WeChatPay'           => [// 微信支付
+                'checkKey' => 'key',
+            ],
+            'WeChatMiniProgram'   => [// 微信小程序
+                'checkKey' => 'secret',
+            ],
+            'WeChatOpenPlatform'  => [// 微信开放平台
+                'checkKey' => 'secret',
+            ],
+            'WxWork'              => [// 企业微信
+                'checkKey' => 'secret',
+            ],
+            'WeChatOpenWork'      => [// 企业微信开放平台
+                'checkKey' => 'secret',
+            ],
+            'WeChatMicroMerchant' => [// 小微商户
+                'checkKey' => 'secret',
+            ]
+        ];
+
+        $params = Yii::$app->params;
+
+        $newArr = [];
+        foreach ($checkArr as $k => $v) {
+            $thisConfig = $params["{$k}Config"];
+            if (!empty($thisConfig[$v['checkKey']])) {
+                $newArr[$k] = $thisConfig;
+            }
+        }
+        return $newArr;
+    }
 
     /**
      *
