@@ -4,10 +4,9 @@ namespace jcbowen\yiieasywechat\v5\WxWork;
 
 use yii\base\Component;
 
-
 /**
  *
- * Class WechatUser
+ * Class WxWorkUser
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2021/5/13 4:53 下午
@@ -18,41 +17,48 @@ class User extends Component
     /**
      * @var string
      */
-    public $id;
+    public string $id;
+
     /**
      * @var string
      */
-    public $nickname;
+    public ?string $UserId;
+
     /**
      * @var string
      */
-    public $name;
+    public ?string $OpenId;
+
     /**
      * @var string
      */
-    public $email;
+    public ?string $external_userid;
+
     /**
      * @var string
      */
-    public $avatar;
+    public string $DeviceId;
+
     /**
      * @var array
      */
-    public $original;
-    /**
-     * @var \Overtrue\Socialite\AccessToken
-     */
-    public $token;
-    /**
-     * @var string
-     */
-    public $provider;
+    public array $raw;
 
     /**
-     * @return string
+     * 初始化操作
+     *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     *
+     * @lasttime: 2021/5/15 10:05 下午
      */
-    public function getOpenId()
+    public function init()
     {
-        return isset($this->original['openid']) ? $this->original['openid'] : '';
+        global $_B;
+        parent::init();
+        $_B['UserId'] = $this->UserId = $this->raw['UserId'];
+        $_B['DeviceId'] = $this->DeviceId = $this->raw['DeviceId'];
+        $_B['OpenId'] = $this->OpenId = $this->raw['OpenId'];
+        $_B['external_userid'] = $this->external_userid = $this->raw['external_userid'];
     }
 }
