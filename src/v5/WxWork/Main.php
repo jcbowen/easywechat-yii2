@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Component;
 use EasyWeChat\Factory;
 use EasyWeChat\Work\Application;
+use EasyWeChat\Kernel\Messages\TextCard;
 
 /**
  * 企业微信 封装方法
@@ -182,5 +183,49 @@ class Main extends Component
             self::$_user = new User($config);
         }
         return self::$_user;
+    }
+
+    /**
+     * 发送文字消息
+     *
+     * @param string $msg 文字消息
+     * @param string $to 企业微信UserId
+     * @return mixed
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @lasttime: 2021/5/16 12:29 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     */
+    public function sendText(string $msg, string $to)
+    {
+        $messager = $this->getApp()->messenger;
+        return $messager->message($msg)->toUser($to)->send();
+    }
+
+    /**
+     * 发送卡片消息
+     *
+     * @param array $msg
+     * [
+     * 'title'       => '测试审批',
+     * 'description' => '单号：1928373, ....',
+     * 'url'         => 'http://www.jiuchet.com'
+     * ]
+     * @param string $to 企业微信UserId
+     * @return mixed
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
+     * @lasttime: 2021/5/16 12:29 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     */
+    public function sendCard(array $msg, string $to)
+    {
+        $messager = $this->getApp()->messenger;
+
+        $message = new TextCard($msg);
+
+        return $messager->message($message)->toUser($to)->send();
     }
 }
