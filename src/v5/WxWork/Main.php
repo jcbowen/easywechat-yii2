@@ -8,43 +8,55 @@ use EasyWeChat\Factory;
 use EasyWeChat\Work\Application;
 
 /**
+ * 企业微信 封装方法
  *
  * Class Main
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2021/5/13 7:21 下午
  * @package jcbowen\yiieasywechat\v5\wechat
+ *
+ * @property User $user
  */
 class Main extends Component
 {
     /**
-     * 微信SDK
-     * @var null
+     * 企业微信SDK
+     * @var Application
      */
-    public static $_app = null;
+    public static $_app = 'Not Init';
 
     /**
      * @var User
      */
-    private static $_user;
+    private static $_user = 'Not Init';
 
     /**
      * 存放用户信息session的key
      * @var string
      */
-    private $SessionKeyUser;
+    public string $SessionKeyUser = '_EasyWechatUser';
 
-    public function __construct($SessionKeyUser = '_EasyWechatUser', $rebinds = [], $config = [])
+    /**
+     * @var string
+     */
+    public string $SessionKeyReturnUrl = '_EasyWechatReturnUrl';
+
+    /**
+     * @var array
+     */
+    public array $rebinds = [];
+
+    public function init()
     {
-        parent::__construct($config);
-        $this->SessionKeyUser = $SessionKeyUser;
+        parent::init();
 
         if (!self::$_app instanceof Application) {
             self::$_app = Factory::work(Yii::$app->params['WxWorkConfig']);
 
-            if (!empty($rebinds)) {
+            if (!empty($this->rebinds)) {
                 $app = self::$_app;
-                foreach ($rebinds as $key => $class) $app->rebind($key, new $class());
+                foreach ($this->rebinds as $key => $class) $app->rebind($key, new $class());
                 self::$_app = $app;
             }
         }
@@ -68,7 +80,7 @@ class Main extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 6:53 下午
      */
-    public function isAuthorized()
+    public function isAuthorized(): bool
     {
         $hasSession = Yii::$app->session->has($this->SessionKeyUser);
         $sessionVal = Yii::$app->session->get($this->SessionKeyUser);
@@ -76,9 +88,9 @@ class Main extends Component
     }
 
     /**
-     * 发起授权请求
+     * 处理网页授权
      *
-     * @return \yii\console\Response|Yii\web\Response
+     * @return Yii\web\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
      * @throws \yii\base\InvalidConfigException
@@ -86,31 +98,41 @@ class Main extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 6:52 下午
      */
-    public function authorizeRequired()
+    public function authorizeRequired(): Yii\web\Response
     {
         $code = Yii::$app->request->get('code');
-        if (Yii::$app->request->get('code')) {
-            // callback and authorize
-            return $this->authorize($this->app->oauth->userFromCode($code));
+        if ($code) {
+            // 接收微信的回调，并处理网页授权
+            return $this->authorize(self::$_app->oauth->userFromCode($code));
         } else {
-            // redirect to wechat authorize page
+            // 将当前页面的绝对链接作为微信回调页面，并跳转到微信授权页面
             $this->setReturnUrl(Yii::$app->request->getUrl());
-            return Yii::$app->response->redirect($this->app->oauth->redirect(Yii::$app->request->absoluteUrl)->getTargetUrl());
+            return Yii::$app->response->redirect(self::$_app->oauth->redirect(Yii::$app->request->absoluteUrl));
         }
     }
 
     /**
+     * 将获取到的信息保存到session中，并跳转到设置的回调url中
+     *
      * @param \Overtrue\Socialite\User $user
-     * @return yii\web\Response
+     * @return \yii\web\Response
+     * @lasttime: 2021/5/15 12:01 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
      */
-    public function authorize(\Overtrue\Socialite\User $user)
+    public function authorize(\Overtrue\Socialite\User $user): \yii\web\Response
     {
         Yii::$app->session->set($this->SessionKeyUser, $user->toJSON());
         return Yii::$app->response->redirect($this->getReturnUrl());
     }
 
     /**
+     * 储存回调url
+     *
      * @param string|array $url
+     * @lasttime: 2021/5/15 10:02 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
      */
     public function setReturnUrl($url)
     {
@@ -118,10 +140,15 @@ class Main extends Component
     }
 
     /**
+     * 获取并输出回调URL
+     *
      * @param null $defaultUrl
-     * @return mixed|null|string
+     * @return mixed|string
+     * @lasttime: 2021/5/15 12:01 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
      */
-    public function getReturnUrl($defaultUrl = null)
+    public function getReturnUrl($defaultUrl = null): string
     {
         $url = Yii::$app->session->get($this->SessionKeyReturnUrl, $defaultUrl);
         if (is_array($url)) {
@@ -136,9 +163,12 @@ class Main extends Component
     }
 
     /**
-     * 获取微信身份信息
+     * 实例化微信身份信息
      *
-     * @return User
+     * @return User|string
+     * @lasttime: 2021/5/15 12:02 上午
+     * @author Bowen
+     * @email bowen@jiuchet.com
      */
     public function getUser()
     {
@@ -148,7 +178,7 @@ class Main extends Component
 
         if (!self::$_user instanceof User) {
             $userInfo = Yii::$app->session->get($this->SessionKeyUser);
-            $config = $userInfo ? json_decode($userInfo, true) : [];
+            $config = $userInfo ? (array)@json_decode($userInfo, true) : [];
             self::$_user = new User($config);
         }
         return self::$_user;

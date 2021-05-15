@@ -49,10 +49,11 @@ class Main extends Component
 
     public function init()
     {
+        global $_B;
         parent::init();
 
         if (!self::$_app instanceof Application) {
-            self::$_app = Factory::officialAccount(Yii::$app->params['WeChatConfig']);
+            self::$_app = Factory::officialAccount($_B['EasyWeChat']['configs']['WeChat']);
 
             if (!empty($this->rebinds)) {
                 $app = self::$_app;
