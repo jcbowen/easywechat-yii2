@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Component;
 use EasyWeChat\Factory;
 use EasyWeChat\OfficialAccount\Application;
+use jcbowen\yiieasywechat\components\Util;
 
 /**
  * 微信公众号 封装方法
@@ -53,12 +54,16 @@ class Main extends Component
         parent::init();
 
         if (!self::$_app instanceof Application) {
-            self::$_app = Factory::officialAccount($_B['EasyWeChat']['configs']['WeChat']);
+            if (!empty($_B['EasyWeChat']['configs']['WeChat'])) {
+                self::$_app = Factory::officialAccount($_B['EasyWeChat']['configs']['WeChat']);
 
-            if (!empty($this->rebinds)) {
-                $app = self::$_app;
-                foreach ($this->rebinds as $key => $class) $app->rebind($key, new $class());
-                self::$_app = $app;
+                if (!empty($this->rebinds)) {
+                    $app = self::$_app;
+                    foreach ($this->rebinds as $key => $class) $app->rebind($key, new $class());
+                    self::$_app = $app;
+                }
+            } else {
+                return Util::result(9001002, '配置信息不存在');
             }
         }
     }

@@ -7,6 +7,7 @@ use yii\base\Component;
 use EasyWeChat\Factory;
 use EasyWeChat\Work\Application;
 use EasyWeChat\Kernel\Messages\TextCard;
+use jcbowen\yiieasywechat\components\Util;
 
 /**
  * 企业微信 封装方法
@@ -50,15 +51,20 @@ class Main extends Component
 
     public function init()
     {
+        global $_B;
         parent::init();
 
         if (!self::$_app instanceof Application) {
-            self::$_app = Factory::work(Yii::$app->params['WxWorkConfig']);
+            if (!empty($_B['EasyWeChat']['configs']['WxWork'])) {
+                self::$_app = Factory::work($_B['EasyWeChat']['configs']['WxWork']);
 
-            if (!empty($this->rebinds)) {
-                $app = self::$_app;
-                foreach ($this->rebinds as $key => $class) $app->rebind($key, new $class());
-                self::$_app = $app;
+                if (!empty($this->rebinds)) {
+                    $app = self::$_app;
+                    foreach ($this->rebinds as $key => $class) $app->rebind($key, new $class());
+                    self::$_app = $app;
+                }
+            } else {
+                return Util::result(9001002, '配置信息不存在');
             }
         }
     }
