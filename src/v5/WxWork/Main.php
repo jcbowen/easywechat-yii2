@@ -64,7 +64,7 @@ class Main extends Component
                     self::$_app = $app;
                 }
             } else {
-                return Util::result(9001002, '配置信息不存在');
+                return Util::result(9001002, '企业微信配置信息不存在');
             }
         }
     }
