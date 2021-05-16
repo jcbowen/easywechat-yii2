@@ -90,7 +90,7 @@ class EasyWeChat extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 8:03 下午
      */
-    public function getIsWechat(): bool
+    public function getIsWeChat(): bool
     {
         global $_B;
         return $_B['isWechat'] = $this->container === 'WeChat';
@@ -104,7 +104,7 @@ class EasyWeChat extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 8:03 下午
      */
-    public function getIsWxwork(): bool
+    public function getIsWxWork(): bool
     {
         global $_B;
         return $_B['isWxwork'] = $this->container === 'WxWork';
