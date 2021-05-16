@@ -97,6 +97,7 @@ class Main extends Component
     /**
      * 处理网页授权
      *
+     * @param bool $goAuth 没获取网页授权的情况下是否进行授权跳转
      * @return Yii\web\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
@@ -105,13 +106,13 @@ class Main extends Component
      * @email bowen@jiuchet.com
      * @lastTime 2021/5/13 6:52 下午
      */
-    public function authorizeRequired(): Yii\web\Response
+    public function authorizeRequired($goAuth = true): Yii\web\Response
     {
         $code = Yii::$app->request->get('code');
         if ($code) {
             // 接收微信的回调，并处理网页授权
             return $this->authorize(self::$_app->oauth->userFromCode($code));
-        } else {
+        } elseif ($goAuth) {
             // 将当前页面的绝对链接作为微信回调页面，并跳转到微信授权页面
             $this->setReturnUrl(Yii::$app->request->getUrl());
             return Yii::$app->response->redirect(self::$_app->oauth->redirect(Yii::$app->request->absoluteUrl));
