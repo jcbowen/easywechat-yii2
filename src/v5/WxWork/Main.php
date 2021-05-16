@@ -129,7 +129,7 @@ class Main extends Component
      * @param $callback
      * @param string $redirect_uri
      *
-     * @return \yii\web\Response
+     * @return array|array[]|object|object[]|string|string[]|\yii\web\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
      * @throws \yii\base\InvalidConfigException
@@ -145,8 +145,10 @@ class Main extends Component
             $_B['fans'] = ArrayHelper::toArray($this->getUser());
 
             if (is_object($callback) && ($callback instanceof Closure)) {
-                $callback($_B['fans']);
+                return $callback($_B['fans']);
             }
+
+            return $_B['fans'];
         } else {
             $apiUrl = 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?';
             $query = [
