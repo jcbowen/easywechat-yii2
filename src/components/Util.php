@@ -40,6 +40,7 @@ class Util
             $response = Yii::$app->getResponse();
             $response->format = Response::FORMAT_JSON;
             $response->data = $result;
+            $response->statusCode = 200;
 
             if ($errCode != 0) {
                 $response->send();
