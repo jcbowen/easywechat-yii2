@@ -2,12 +2,14 @@
 
 namespace jcbowen\yiieasywechat\v5\WxWork;
 
+use Closure;
 use Yii;
 use yii\base\Component;
 use EasyWeChat\Factory;
 use EasyWeChat\Work\Application;
 use EasyWeChat\Kernel\Messages\TextCard;
 use jcbowen\yiieasywechat\components\Util;
+use yii\helpers\ArrayHelper;
 
 /**
  * 企业微信 封装方法
@@ -109,13 +111,52 @@ class Main extends Component
     public function authorizeRequired($goAuth = true): Yii\web\Response
     {
         $code = Yii::$app->request->get('code');
-        if ($code) {
+        if (!empty($code)) {
             // 接收微信的回调，并处理网页授权
             return $this->authorize(self::$_app->oauth->userFromCode($code));
         } elseif ($goAuth) {
             // 将当前页面的绝对链接作为微信回调页面，并跳转到微信授权页面
             $this->setReturnUrl(Yii::$app->request->getUrl());
             return Yii::$app->response->redirect(self::$_app->oauth->redirect(Yii::$app->request->absoluteUrl));
+        }
+        return Util::result(1, '未知错误');
+    }
+
+
+    /**
+     * 构造及处理扫码登录
+     *
+     * @param $callback
+     * @param string $redirect_uri
+     *
+     * @return \yii\web\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
+     * @throws \yii\base\InvalidConfigException
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     * @lastTime 2021/5/16 9:32 下午
+     */
+    public function qrConnect($callback, $redirect_uri = '')
+    {
+        global $_B;
+        if (!empty(Yii::$app->request->get('code'))) {
+            $this->authorizeRequired(false);
+            $_B['fans'] = ArrayHelper::toArray($this->getUser());
+
+            if (is_object($callback) && ($callback instanceof Closure)) {
+                $callback($_B['fans']);
+            }
+        } else {
+            $apiUrl = 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?';
+            $query = [
+                'appid'        => $_B['EasyWeChat']['configs']['WxWork']['corp_id'],
+                'agentid'      => $_B['EasyWeChat']['configs']['WxWork']['agent_id'],
+                'redirect_uri' => $redirect_uri ? $redirect_uri : Yii::$app->request->absoluteUrl,
+                'state'        => time()
+            ];;
+            $apiUrl .= http_build_query($query);
+            return Yii::$app->response->redirect($apiUrl);
         }
     }
 
@@ -171,7 +212,7 @@ class Main extends Component
     }
 
     /**
-     * 实例化微信身份信息
+     * 实例化粉丝身份信息
      *
      * @return User|string
      * @lasttime: 2021/5/15 12:02 上午
