@@ -118,8 +118,7 @@ class EasyWeChat extends Component
      * s     */
     public function getIsMicroMessage(): bool
     {
-        global $_B;
-        return $_B['isMicroMessage'] = ($this->getIsWechat() || $this->getIsWxwork());
+        return ($this->getIsWechat() || $this->getIsWxwork());
     }
 
     /**
