@@ -92,8 +92,7 @@ class EasyWeChat extends Component
      */
     public function getIsWeChat(): bool
     {
-        global $_B;
-        return $_B['isWechat'] = $this->container === 'WeChat';
+        return $this->container === 'WeChat';
     }
 
     /**
@@ -106,8 +105,7 @@ class EasyWeChat extends Component
      */
     public function getIsWxWork(): bool
     {
-        global $_B;
-        return $_B['isWxwork'] = $this->container === 'WxWork';
+        return $this->container === 'WxWork';
     }
 
     /**
