@@ -1,46 +1,44 @@
 {
-	"name": "jcbowen/yii-easywechat",
-	"description": "WeChat SDK for Yii2 , 基于 overtrue/wechat 5.x",
-	"keywords": [
-		"yii",
-		"yii2",
-		"wechat",
-		"easywechat",
-		"php",
-		"jcbowen"
-	],
-	"type": "yii2-extension",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Bowen",
-			"email": "bowen@jiuchet.com"
-		}
-	],
-	"minimum-stability": "stable",
-	"require": {
-		"php": ">=7.4",
-		"yiisoft/yii2": "^2.0.4",
-		"overtrue/wechat": "~5.5.0",
-        "ext-json": "*"
-    },
-	"autoload": {
-		"psr-4": {
-			"jcbowen\\yiieasywechat\\": "./src"
-		}
-	},
-	"repositories": {
-		"packagist": {
-			"type": "composer",
-			"url": "https://packagist.phpcomposer.com"
-		},
-		"0": {
-			"type": "composer",
-			"url": "https://packagist.org"
-		},
-		"1": {
-			"type": "composer",
-			"url": "https://packagist.phpcomposer.com"
-		}
-	}
+  "name": "jcbowen/yii-easywechat",
+  "description": "WeChat SDK for Yii2 , 基于 overtrue/wechat 5.x",
+  "keywords": [
+    "yii",
+    "yii2",
+    "wechat",
+    "easywechat",
+    "php",
+    "jcbowen"
+  ],
+  "type": "yii2-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bowen",
+      "email": "bowen@jiuchet.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.4",
+    "yiisoft/yii2": "^2.0.4",
+    "overtrue/wechat": "~5.5.4",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "jcbowen\\EasyWechat5Yii2\\": "./src"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "easywechat-composer/easywechat-composer": true,
+      "yiisoft/yii2-composer": true
+    }
+  }
 }

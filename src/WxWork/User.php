@@ -1,6 +1,6 @@
 <?php
 
-namespace jcbowen\yiieasywechat\v5\WxWork;
+namespace jcbowen\EasyWechat5Yii2\WxWork;
 
 use yii\base\Component;
 
@@ -9,8 +9,8 @@ use yii\base\Component;
  * Class WxWorkUser
  * @author Bowen
  * @email bowen@jiuchet.com
- * @lastTime 2021/5/13 4:53 下午
- * @package jcbowen\yiieasywechat
+ * @package jcbowen\EasyWechat5Yii2
+ * @lastTime 2022/9/13 1:50 PM
  */
 class User extends Component
 {
@@ -20,17 +20,17 @@ class User extends Component
     public string $id;
 
     /**
-     * @var string
+     * @var string|null
      */
     public ?string $UserId;
 
     /**
-     * @var string
+     * @var string|null
      */
     public ?string $OpenId;
 
     /**
-     * @var string
+     * @var string|null
      */
     public ?string $external_userid;
 
@@ -50,15 +50,10 @@ class User extends Component
      * @author Bowen
      * @email bowen@jiuchet.com
      *
-     * @lasttime: 2021/5/15 10:05 下午
+     * @lasttime: 2022/9/13 2:31 PM
      */
     public function init()
     {
-        global $_B;
         parent::init();
-        $_B['UserId'] = $this->UserId = $this->raw['UserId'];
-        $_B['DeviceId'] = $this->DeviceId = $this->raw['DeviceId'];
-        $_B['OpenId'] = $this->OpenId = $this->raw['OpenId'];
-        $_B['external_userid'] = $this->external_userid = $this->raw['external_userid'];
     }
 }

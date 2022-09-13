@@ -1,6 +1,6 @@
 <?php
 
-namespace jcbowen\yiieasywechat\v5\WeChat;
+namespace jcbowen\EasyWechat5Yii2\WeChat;
 
 use yii\base\Component;
 
@@ -9,8 +9,8 @@ use yii\base\Component;
  * Class WechatUser
  * @author Bowen
  * @email bowen@jiuchet.com
- * @lastTime 2021/5/13 4:53 下午
- * @package jcbowen\yiieasywechat
+ * @lastTime 2022/9/13 2:29 PM
+ * @package jcbowen\EasyWechat5Yii2
  */
 class User extends Component
 {
@@ -65,37 +65,34 @@ class User extends Component
      * @author Bowen
      * @email bowen@jiuchet.com
      *
-     * @lasttime: 2021/5/15 10:55 下午
+     * @lasttime: 2022/9/13 2:29 PM
      */
     public function init()
     {
-        global $_B;
         parent::init();
-        $_B['openid'] = $this->getOpenId();
-        $_B['unionid'] = $this->getUnionid();
     }
 
     /**
      *
      * @return string
-     * @lasttime: 2021/5/15 10:53 下午
+     * @lasttime: 2022/9/13 2:29 PM
      * @author Bowen
      * @email bowen@jiuchet.com
      */
     public function getOpenId(): string
     {
-        return isset($this->raw['openid']) ? $this->raw['openid'] : '';
+        return $this->raw['openid'] ?? '';
     }
 
     /**
      *
      * @return string
-     * @lasttime: 2021/5/15 10:53 下午
+     * @lasttime: 2022/9/13 2:29 PM
      * @author Bowen
      * @email bowen@jiuchet.com
      */
-    public function getUnionid()
+    public function getUnionid(): string
     {
-        return isset($this->raw['unionid']) ? $this->raw['unionid'] : '';
+        return $this->raw['unionid'] ?? '';
     }
 }

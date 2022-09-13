@@ -1,15 +1,21 @@
 <?php
 
-namespace jcbowen\yiieasywechat\v5\WxWork;
+namespace jcbowen\EasyWechat5Yii2\WxWork;
 
 use Closure;
+use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Exceptions\RuntimeException;
+use GuzzleHttp\Exception\GuzzleException;
+use Overtrue\Socialite\Exceptions\AuthorizeFailedException;
 use Yii;
 use yii\base\Component;
 use EasyWeChat\Factory;
 use EasyWeChat\Work\Application;
 use EasyWeChat\Kernel\Messages\TextCard;
-use jcbowen\yiieasywechat\components\Util;
+use jcbowen\EasyWechat5Yii2\components\Util;
 use yii\helpers\ArrayHelper;
+use yii\web\Response;
 
 /**
  * 企业微信 封装方法
@@ -17,8 +23,8 @@ use yii\helpers\ArrayHelper;
  * Class Main
  * @author Bowen
  * @email bowen@jiuchet.com
- * @lastTime 2021/5/13 7:21 下午
- * @package jcbowen\yiieasywechat\v5\wechat
+ * @lastTime 2022/9/13 1:50 PM
+ * @package jcbowen\EasyWechat5Yii2\wechat
  *
  * @property User $user
  */
@@ -39,26 +45,28 @@ class Main extends Component
      * 存放用户信息session的key
      * @var string
      */
-    public string $SessionKeyUser = '_EasyWechatUser';
+    public string $SessionKeyUser = '_WxWorkUser';
 
     /**
      * @var string
      */
-    public string $SessionKeyReturnUrl = '_EasyWechatReturnUrl';
+    public string $SessionKeyReturnUrl = '_WxWorkReturnUrl';
 
     /**
      * @var array
      */
     public array $rebinds = [];
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function init()
     {
-        global $_B;
         parent::init();
 
         if (!self::$_app instanceof Application) {
-            if (!empty($_B['EasyWeChat']['configs']['WxWork'])) {
-                self::$_app = Factory::work($_B['EasyWeChat']['configs']['WxWork']);
+            if (!empty(Yii::$app->params['WxWorkConfig'])) {
+                self::$_app = Factory::work(Yii::$app->params['WxWorkConfig']);
 
                 if (!empty($this->rebinds)) {
                     $app = self::$_app;
@@ -66,7 +74,7 @@ class Main extends Component
                     self::$_app = $app;
                 }
             } else {
-                return Util::result(9001002, '企业微信配置信息不存在');
+                throw new InvalidConfigException('请配置WxWorkConfig');
             }
         }
     }
@@ -74,7 +82,7 @@ class Main extends Component
     /**
      * 获取 EasyWeChat 微信实例
      *
-     * @return Factory|Application
+     * @return Application
      */
     public function getApp()
     {
@@ -84,10 +92,10 @@ class Main extends Component
     /**
      * 通过session判断当前用户是否已经授权
      *
-     * @return bool
      * @author Bowen
      * @email bowen@jiuchet.com
-     * @lastTime 2021/5/13 6:53 下午
+     * @lastTime 2022/9/13 2:30 PM
+     * @return bool
      */
     public function isAuthorized(): bool
     {
@@ -99,16 +107,16 @@ class Main extends Component
     /**
      * 处理网页授权
      *
-     * @param bool $goAuth 没获取网页授权的情况下是否进行授权跳转
-     * @return Yii\web\Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
-     * @throws \yii\base\InvalidConfigException
      * @author Bowen
      * @email bowen@jiuchet.com
-     * @lastTime 2021/5/13 6:52 下午
+     * @lastTime 2022/9/13 2:30 PM
+     * @param bool $goAuth 没获取网页授权的情况下是否进行授权跳转
+     * @return Response
+     * @throws AuthorizeFailedException
+     * @throws \yii\base\InvalidConfigException
+     * @throws GuzzleException
      */
-    public function authorizeRequired($goAuth = true): Yii\web\Response
+    public function authorizeRequired(bool $goAuth = true): Response
     {
         $code = Yii::$app->request->get('code');
         if (!empty($code)) {
@@ -126,37 +134,35 @@ class Main extends Component
     /**
      * 构造及处理扫码登录
      *
-     * @param $callback
-     * @param string $redirect_uri
-     *
-     * @return array|array[]|object|object[]|string|string[]|\yii\web\Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Overtrue\Socialite\Exceptions\AuthorizeFailedException
-     * @throws \yii\base\InvalidConfigException
      * @author Bowen
      * @email bowen@jiuchet.com
-     * @lastTime 2021/5/16 9:32 下午
+     * @param string $redirect_uri
+     * @param $callback
+     * @return array|array[]|object|object[]|string|string[]|Response
+     * @throws AuthorizeFailedException
+     * @throws \yii\base\InvalidConfigException
+     * @throws GuzzleException
+     * @lastTime 2022/9/13 1:47 PM
      */
-    public function qrConnect($callback, $redirect_uri = '')
+    public function qrConnect($callback, string $redirect_uri = '')
     {
-        global $_B;
         if (!empty(Yii::$app->request->get('code'))) {
             $this->authorizeRequired(false);
-            $_B['fans'] = ArrayHelper::toArray($this->getUser());
+            $fans = ArrayHelper::toArray($this->getUser());
 
-            if (is_object($callback) && ($callback instanceof Closure)) {
-                return $callback($_B['fans']);
+            if ($callback instanceof Closure) {
+                return $callback($fans);
             }
 
-            return $_B['fans'];
+            return $fans;
         } else {
             $apiUrl = 'https://open.work.weixin.qq.com/wwopen/sso/qrConnect?';
-            $query = [
-                'appid'        => $_B['EasyWeChat']['configs']['WxWork']['corp_id'],
-                'agentid'      => $_B['EasyWeChat']['configs']['WxWork']['agent_id'],
-                'redirect_uri' => $redirect_uri ? $redirect_uri : Yii::$app->request->absoluteUrl,
+            $query  = [
+                'appid'        => Yii::$app->params['WxWorkConfig']['corp_id'],
+                'agentid'      => Yii::$app->params['WxWorkConfig']['agent_id'],
+                'redirect_uri' => $redirect_uri ?: Yii::$app->request->absoluteUrl,
                 'state'        => time()
-            ];;
+            ];
             $apiUrl .= http_build_query($query);
             return Yii::$app->response->redirect($apiUrl);
         }
@@ -165,13 +171,13 @@ class Main extends Component
     /**
      * 将获取到的信息保存到session中，并跳转到设置的回调url中
      *
-     * @param \Overtrue\Socialite\User $user
-     * @return \yii\web\Response
-     * @lasttime: 2021/5/15 12:01 上午
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @param \Overtrue\Socialite\User $user
+     * @return Response
+     * @lasttime: 2022/9/13 2:30 PM
      */
-    public function authorize(\Overtrue\Socialite\User $user): \yii\web\Response
+    public function authorize(\Overtrue\Socialite\User $user): Response
     {
         Yii::$app->session->set($this->SessionKeyUser, $user->toJSON());
         return Yii::$app->response->redirect($this->getReturnUrl());
@@ -180,10 +186,10 @@ class Main extends Component
     /**
      * 储存回调url
      *
-     * @param string|array $url
-     * @lasttime: 2021/5/15 10:02 上午
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @param string|array $url
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function setReturnUrl($url)
     {
@@ -193,11 +199,11 @@ class Main extends Component
     /**
      * 获取并输出回调URL
      *
-     * @param null $defaultUrl
-     * @return mixed|string
-     * @lasttime: 2021/5/15 12:01 上午
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @param null $defaultUrl
+     * @return mixed|string
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function getReturnUrl($defaultUrl = null): string
     {
@@ -216,10 +222,10 @@ class Main extends Component
     /**
      * 实例化粉丝身份信息
      *
-     * @return User|string
-     * @lasttime: 2021/5/15 12:02 上午
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @return User|string
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function getUser()
     {
@@ -228,8 +234,8 @@ class Main extends Component
         }
 
         if (!self::$_user instanceof User) {
-            $userInfo = Yii::$app->session->get($this->SessionKeyUser);
-            $config = $userInfo ? (array)@json_decode($userInfo, true) : [];
+            $userInfo    = Yii::$app->session->get($this->SessionKeyUser);
+            $config      = $userInfo ? (array)@json_decode($userInfo, true) : [];
             self::$_user = new User($config);
         }
         return self::$_user;
@@ -238,14 +244,14 @@ class Main extends Component
     /**
      * 发送文字消息
      *
-     * @param string $msg 文字消息
-     * @param string $to 企业微信UserId
-     * @return mixed
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
-     * @lasttime: 2021/5/16 12:29 上午
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @param string $to 企业微信UserId
+     * @param string $msg 文字消息
+     * @return mixed
+     * @throws RuntimeException
+     * @lasttime: 2022/9/13 2:30 PM
+     * @throws InvalidArgumentException
      */
     public function sendText(string $msg, string $to)
     {
@@ -256,26 +262,26 @@ class Main extends Component
     /**
      * 发送卡片消息
      *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     * @param string $to 企业微信UserId
      * @param array $msg
      * [
      * 'title'       => '测试审批',
      * 'description' => '单号：1928373, ....',
      * 'url'         => 'http://www.jiuchet.com'
      * ]
-     * @param string $to 企业微信UserId
      * @return mixed
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\RuntimeException
-     * @lasttime: 2021/5/16 12:29 上午
-     * @author Bowen
-     * @email bowen@jiuchet.com
+     * @throws RuntimeException
+     * @lasttime: 2022/9/13 1:56 PM
+     * @throws InvalidArgumentException
      */
     public function sendCard(array $msg, string $to)
     {
-        $messager = $this->getApp()->messenger;
+        $messenger = $this->getApp()->messenger;
 
         $message = new TextCard($msg);
 
-        return $messager->message($message)->toUser($to)->send();
+        return $messenger->message($message)->toUser($to)->send();
     }
 }

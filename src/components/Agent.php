@@ -1,13 +1,13 @@
 <?php
 
-namespace jcbowen\yiieasywechat\components;
+namespace jcbowen\EasyWechat5Yii2\components;
 
 /**
  *
  * Class Agent
  * @author Bowen
  * @email bowen@jiuchet.com
- * @lastTime 2021/5/13 11:27 下午
+ * @lastTime 2022/9/13 2:13 PM
  */
 class Agent
 {
@@ -48,7 +48,7 @@ class Agent
     const APP_INSTALLED_NOT = 0;
 
     // 得到agent完整类型信息
-    public static function getDeviceInfo()
+    public static function getDeviceInfo(): array
     {
         return array(
             'deviceType'  => self::deviceType(),
@@ -60,7 +60,7 @@ class Agent
     }
 
     // 浏览器类型
-    public static function browserType($agent = '')
+    public static function browserType($agent = ''): int
     {
         $agent = self::getAgent($agent);
         if (stripos($agent, 'baiduboxapp') !== false) {
@@ -87,7 +87,7 @@ class Agent
     }
 
     // 系统类型
-    public static function osType($agent = '')
+    public static function osType($agent = ''): int
     {
         $agent = self::getAgent($agent);
         $browserType = self::browserType($agent);
@@ -109,7 +109,7 @@ class Agent
     }
 
     // 设备类型
-    public static function deviceType()
+    public static function deviceType(): int
     {
         if (self::isMobile()) {
             return self::DEVICE_MOBILE;
@@ -119,7 +119,7 @@ class Agent
     }
 
     // retina屏
-    public static function isRetina($agent = '')
+    public static function isRetina($agent = ''): int
     {
         $agent = self::getAgent($agent);
         $osType = self::osType($agent);
@@ -132,7 +132,7 @@ class Agent
     }
 
     // ios6系统的手机(iphone4, iphone4s)
-    public static function isIos6($agent = '')
+    public static function isIos6($agent = ''): int
     {
         $agent = self::getAgent($agent);
 
@@ -148,7 +148,7 @@ class Agent
 
 
     // 检查是否是微信浏览器打开
-    public static function isMicroMessage($agent = '')
+    public static function isMicroMessage($agent = ''): int
     {
         $agent = self::getAgent($agent);
 
@@ -162,7 +162,7 @@ class Agent
     }
 
     // 已安装APP
-    public static function isAppInstalled()
+    public static function isAppInstalled(): int
     {
         if (isset($_GET['isappinstalled']) && ($_GET['isappinstalled'] == 1)) {
             return self::APP_INSTALLED_YES;
@@ -172,7 +172,7 @@ class Agent
     }
 
     // 是移动设备访问
-    public static function isMobile()
+    public static function isMobile(): bool
     {
         // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
@@ -207,7 +207,6 @@ class Agent
 
     public static function getAgent($agent = '')
     {
-        $agent = empty($agent) ? $_SERVER['HTTP_USER_AGENT'] : $agent;
-        return $agent;
+        return empty($agent) ? $_SERVER['HTTP_USER_AGENT'] : $agent;
     }
 }

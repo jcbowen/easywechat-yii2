@@ -1,9 +1,10 @@
 <?php
 
-namespace jcbowen\yiieasywechat\v5;
+namespace jcbowen\EasyWechat5Yii2;
 
+use jcbowen\EasyWechat5Yii2\components\Agent;
 use Exception;
-use jcbowen\yiieasywechat\components\Agent;
+use Throwable;
 use Yii;
 use yii\base\Component;
 
@@ -12,8 +13,8 @@ use yii\base\Component;
  * Class EasyWeChat
  * @author Bowen
  * @email bowen@jiuchet.com
- * @lastTime 2021/5/13 4:48 下午
- * @package jcbowen\yiieasywechat
+ * @lastTime 2022/9/13 2:31 PM
+ * @package jcbowen\EasyWechat5Yii2
  *
  * @property \EasyWeChat\OfficialAccount\Application $WeChat 微信实例
  * @property \EasyWeChat\Payment\Application $WeChatPay 微信支付实例
@@ -49,46 +50,39 @@ class EasyWeChat extends Component
 
     /**
      * 实例化应用SDK
-     *
-     * @var \jcbowen\yiieasywechat\v5\WeChat\Main
-     * @var \jcbowen\yiieasywechat\v5\WxWork\Main
+     * @var string|WeChat\Main|WxWork\Main
      */
     private static $_app = 'Not Init';
 
     public function init()
     {
-        global $_B;
-
         parent::init();
 
         $browserType = Agent::browserType();
         if (Agent::MICRO_MESSAGE_WORK_YES == Agent::isMicroMessage()) {
-            $_B['container'] = 'WxWork';
+            $this->container = 'WxWork';
         } elseif (Agent::MICRO_MESSAGE_YES == Agent::isMicroMessage()) {
-            $_B['container'] = 'WeChat';
+            $this->container = 'WeChat';
         } elseif (Agent::BROWSER_TYPE_ANDROID == $browserType) {
-            $_B['container'] = 'Android';
+            $this->container = 'Android';
         } elseif (Agent::BROWSER_TYPE_IPAD == $browserType) {
-            $_B['container'] = 'Ipad';
+            $this->container = 'Ipad';
         } elseif (Agent::BROWSER_TYPE_IPHONE == $browserType) {
-            $_B['container'] = 'Iphone';
+            $this->container = 'Iphone';
         } elseif (Agent::BROWSER_TYPE_IPOD == $browserType) {
-            $_B['container'] = 'Ipod';
+            $this->container = 'Ipod';
         } else {
-            $_B['container'] = 'Unknown';
+            $this->container = 'Unknown';
         }
-        $this->container = $_B['container'];
-
-        $_B['EasyWeChat']['configs'] = $this->getConfig();
     }
 
     /**
      * 判断客户端是否为微信
      *
-     * @return bool
      * @author Bowen
      * @email bowen@jiuchet.com
-     * @lastTime 2021/5/13 8:03 下午
+     * @lastTime 2022/9/13 2:32 PM
+     * @return bool
      */
     public function getIsWeChat(): bool
     {
@@ -98,10 +92,10 @@ class EasyWeChat extends Component
     /**
      * 判断客户端是否为企业微信
      *
-     * @return bool
      * @author Bowen
      * @email bowen@jiuchet.com
-     * @lastTime 2021/5/13 8:03 下午
+     * @lastTime 2022/9/13 2:32 PM
+     * @return bool
      */
     public function getIsWxWork(): bool
     {
@@ -111,11 +105,11 @@ class EasyWeChat extends Component
     /**
      * 判断客户端是否为微信系浏览器
      *
-     * @return bool
-     * @lasttime: 2021/5/15 2:11 下午
      * @author Bowen
      * @email bowen@jiuchet.com
-     * s     */
+     * @return bool
+     * @lasttime: 2022/9/13 2:32 PM
+     */
     public function getIsMicroMessage(): bool
     {
         return ($this->getIsWechat() || $this->getIsWxwork());
@@ -124,17 +118,17 @@ class EasyWeChat extends Component
     /**
      * 获取EasyWeChat 页面类实例
      *
-     * @return \jcbowen\yiieasywechat\v5\WeChat\Main|\jcbowen\yiieasywechat\v5\WxWork\Main|bool
+     * @return WeChat\Main|WxWork\Main|bool
      */
     public function getApp($appName = '')
     {
-        $appName = $appName ? $appName : $this->container;
+        $appName = $appName ?: $this->container;
         if (!self::$_app || self::$_app === 'Not Init') {
             switch ($appName) {
                 case 'WeChat':
                 case 'WxWork':
-                    $nameSpace = '\jcbowen\yiieasywechat\v5\%s\Main';
-                    $nameSpace = sprintf($nameSpace, $appName);
+                    $nameSpace  = '\jcbowen\EasyWechat5Yii2\%s\Main';
+                    $nameSpace  = sprintf($nameSpace, $appName);
                     self::$_app = new $nameSpace([
                         'SessionKeyUser'      => $this->SessionKeyUser,
                         'SessionKeyReturnUrl' => $this->SessionKeyReturnUrl,
@@ -145,18 +139,18 @@ class EasyWeChat extends Component
                     self::$_app = null;
             }
         }
-        return self::$_app ? self::$_app : false;
+        return self::$_app ?: false;
     }
 
     /**
      * 获取配置信息
      *
-     * @return array[]
-     * @lasttime: 2021/5/15 4:36 下午
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @return array[]
+     * @lasttime: 2022/9/13 2:32 PM
      */
-    private function getConfig(): array
+    public function getConfig(): array
     {
         $checkArr = [
             'WeChat'              => [// 微信公众号
@@ -196,14 +190,14 @@ class EasyWeChat extends Component
 
     /**
      *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     * @lastTime 2022/9/13 2:33 PM
+     *
      * @param string $name
      *
      * @return mixed
-     * @throws Exception
-     * @author Bowen
-     * @email bowen@jiuchet.com
-     * @lastTime 2021/5/13 8:22 下午
-     *
+     * @throws Exception|Throwable
      */
     public function __get($name)
     {
