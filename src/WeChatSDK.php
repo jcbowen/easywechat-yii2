@@ -10,7 +10,7 @@ use yii\base\Component;
 
 /**
  *
- * Class EasyWeChat
+ * Class WeChatSDK
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2022/9/13 2:31 PM
@@ -24,7 +24,7 @@ use yii\base\Component;
  * @property \EasyWeChat\OpenWork\Application $WeChatOpenWork 企业微信开放平台实例
  * @property \EasyWeChat\MicroMerchant\Application $WeChatMicroMerchant 小微商户实例
  */
-class EasyWeChat extends Component
+class WeChatSDK extends Component
 {
     /**
      * 存放用户信息session的key
