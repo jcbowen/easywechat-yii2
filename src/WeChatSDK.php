@@ -120,11 +120,11 @@ class WeChatSDK extends Component
     }
 
     /**
-     * 获取EasyWeChat 页面类实例
+     * 初始化SDK
      *
      * @return WeChat\Main|WxWork\Main|bool
      */
-    public function getApp($appName = '')
+    public function app($appName = '')
     {
         $appName        = $appName ?: in_array($this->container, [
             'WeChat',

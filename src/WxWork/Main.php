@@ -84,7 +84,7 @@ class Main extends Component
      *
      * @return Application
      */
-    public function getApp()
+    public function get()
     {
         return self::$_app;
     }
