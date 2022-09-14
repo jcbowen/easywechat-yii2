@@ -74,7 +74,7 @@ class Main extends Component
                     self::$_app = $app;
                 }
             } else {
-                throw new InvalidConfigException('请配置WxWorkConfig');
+                throw new InvalidConfigException('WxWorkConfig Not Found');
             }
         }
     }

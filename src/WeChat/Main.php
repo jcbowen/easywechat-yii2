@@ -2,7 +2,6 @@
 
 namespace Jcbowen\EasyWechat5Yii2\WeChat;
 
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Overtrue\Socialite\Exceptions\AuthorizeFailedException;
 use Yii;
@@ -52,7 +51,7 @@ class Main extends Component
     public array $rebinds = [];
 
     /**
-     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -68,7 +67,7 @@ class Main extends Component
                     self::$_app = $app;
                 }
             } else {
-                throw new Exception('WeChatConfig Not Found');
+                throw new InvalidConfigException('WeChatConfig Not Found');
             }
         }
     }
@@ -88,7 +87,7 @@ class Main extends Component
      *
      * @author Bowen
      * @email bowen@jiuchet.com
-     * @lastTime 2022/9/13 2:28 PM
+     * @lastTime 2022/9/13 2:30 PM
      * @return bool
      */
     public function isAuthorized(): bool
@@ -129,7 +128,7 @@ class Main extends Component
      * @email bowen@jiuchet.com
      * @param \Overtrue\Socialite\User $user
      * @return Response
-     * @lasttime: 2022/9/13 2:28 PM
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function authorize(\Overtrue\Socialite\User $user): Response
     {
@@ -143,7 +142,7 @@ class Main extends Component
      * @author Bowen
      * @email bowen@jiuchet.com
      * @param string|array $url
-     * @lasttime: 2022/9/13 2:29 PM
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function setReturnUrl($url)
     {
@@ -157,7 +156,7 @@ class Main extends Component
      * @email bowen@jiuchet.com
      * @param null $defaultUrl
      * @return mixed|string
-     * @lasttime: 2022/9/13 2:29 PM
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function getReturnUrl($defaultUrl = null): string
     {
@@ -174,29 +173,23 @@ class Main extends Component
     }
 
     /**
-     * 实例化微信身份信息
+     * 实例化粉丝身份信息
      *
      * @author Bowen
      * @email bowen@jiuchet.com
      * @return User|string
-     * @lasttime: 2022/9/13 2:29 PM
+     * @lasttime: 2022/9/13 2:30 PM
      */
     public function getUser()
     {
-        if (empty(Yii::$app->request->isConsoleRequest)) {
-            if (!$this->isAuthorized()) {
-                return new User();
-            }
+        if (!$this->isAuthorized()) {
+            return new User();
+        }
 
-            if (!self::$_user instanceof User) {
-                $userInfo    = Yii::$app->session->get($this->SessionKeyUser);
-                $config      = $userInfo ? (array)@json_decode($userInfo, true) : [];
-                self::$_user = new User($config);
-            }
-        } else {
-            if (!self::$_user instanceof User) {
-                self::$_user = new User();
-            }
+        if (!self::$_user instanceof User) {
+            $userInfo    = Yii::$app->session->get($this->SessionKeyUser);
+            $config      = $userInfo ? (array)@json_decode($userInfo, true) : [];
+            self::$_user = new User($config);
         }
         return self::$_user;
     }
