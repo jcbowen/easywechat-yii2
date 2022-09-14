@@ -126,7 +126,10 @@ class EasyWeChat extends Component
      */
     public function getApp($appName = '')
     {
-        $appName        = $appName ?: $this->container;
+        $appName        = $appName ?: in_array($this->container, [
+            'WeChat',
+            'WxWork'
+        ]);
         $appName4switch = strtolower($appName); // 大小写兼容性处理
         if (!self::$_app || self::$_app === 'Not Init') {
             switch ($appName4switch) {
