@@ -1,6 +1,6 @@
 {
   "name": "jcbowen/yii-easywechat",
-  "description": "WeChat SDK for Yii2 , 基于 overtrue/wechat 5.x",
+  "description": "WeChat SDK for Yii2 , 基于 w7corp/easywechat 5.x",
   "keywords": [
     "yii",
     "yii2",
@@ -21,7 +21,7 @@
   "require": {
     "php": ">=7.4",
     "yiisoft/yii2": "^2.0.4",
-    "w7corp/easywechat": "~5.5.4",
+    "w7corp/easywechat": "^5.0",
     "ext-json": "*"
   },
   "autoload": {

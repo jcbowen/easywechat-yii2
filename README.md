@@ -1,6 +1,7 @@
 # yii-easywechat
-WeChat SDK for Yii2 , 基于 overtrue/wechat 5.x
+
+WeChat SDK for Yii2 , 基于 w7corp/easywechat 5.x
 
 ```shell
-composer require jcbowen/yii-easywechat 
+composer require jcbowen/yii-easywechat:^2.0 -vvv 
 ```
