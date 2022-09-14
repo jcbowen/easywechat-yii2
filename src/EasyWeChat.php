@@ -58,21 +58,25 @@ class EasyWeChat extends Component
     {
         parent::init();
 
-        $browserType = Agent::browserType();
-        if (Agent::MICRO_MESSAGE_WORK_YES == Agent::isMicroMessage()) {
-            $this->container = 'WxWork';
-        } elseif (Agent::MICRO_MESSAGE_YES == Agent::isMicroMessage()) {
-            $this->container = 'WeChat';
-        } elseif (Agent::BROWSER_TYPE_ANDROID == $browserType) {
-            $this->container = 'Android';
-        } elseif (Agent::BROWSER_TYPE_IPAD == $browserType) {
-            $this->container = 'Ipad';
-        } elseif (Agent::BROWSER_TYPE_IPHONE == $browserType) {
-            $this->container = 'Iphone';
-        } elseif (Agent::BROWSER_TYPE_IPOD == $browserType) {
-            $this->container = 'Ipod';
+        if (!empty(Yii::$app->request->isConsoleRequest)) {
+            $browserType = Agent::browserType();
+            if (Agent::MICRO_MESSAGE_WORK_YES == Agent::isMicroMessage()) {
+                $this->container = 'WxWork';
+            } elseif (Agent::MICRO_MESSAGE_YES == Agent::isMicroMessage()) {
+                $this->container = 'WeChat';
+            } elseif (Agent::BROWSER_TYPE_ANDROID == $browserType) {
+                $this->container = 'Android';
+            } elseif (Agent::BROWSER_TYPE_IPAD == $browserType) {
+                $this->container = 'Ipad';
+            } elseif (Agent::BROWSER_TYPE_IPHONE == $browserType) {
+                $this->container = 'Iphone';
+            } elseif (Agent::BROWSER_TYPE_IPOD == $browserType) {
+                $this->container = 'Ipod';
+            } else {
+                $this->container = 'Unknown';
+            }
         } else {
-            $this->container = 'Unknown';
+            $this->container = 'Console';
         }
     }
 
@@ -122,11 +126,12 @@ class EasyWeChat extends Component
      */
     public function getApp($appName = '')
     {
-        $appName = $appName ?: $this->container;
+        $appName        = $appName ?: $this->container;
+        $appName4switch = strtolower($appName); // 大小写兼容性处理
         if (!self::$_app || self::$_app === 'Not Init') {
-            switch ($appName) {
-                case 'WeChat':
-                case 'WxWork':
+            switch ($appName4switch) {
+                case 'wechat':
+                case 'wxwork':
                     $nameSpace  = '\Jcbowen\EasyWechat5Yii2\%s\Main';
                     $nameSpace  = sprintf($nameSpace, $appName);
                     self::$_app = new $nameSpace([
