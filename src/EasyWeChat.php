@@ -58,7 +58,7 @@ class EasyWeChat extends Component
     {
         parent::init();
 
-        if (!empty(Yii::$app->request->isConsoleRequest)) {
+        if (empty(Yii::$app->request->isConsoleRequest)) {
             $browserType = Agent::browserType();
             if (Agent::MICRO_MESSAGE_WORK_YES == Agent::isMicroMessage()) {
                 $this->container = 'WxWork';
