@@ -183,14 +183,20 @@ class Main extends Component
      */
     public function getUser()
     {
-        if (!$this->isAuthorized()) {
-            return new User();
-        }
+        if (empty(Yii::$app->request->isConsoleRequest)) {
+            if (!$this->isAuthorized()) {
+                return new User();
+            }
 
-        if (!self::$_user instanceof User) {
-            $userInfo    = Yii::$app->session->get($this->SessionKeyUser);
-            $config      = $userInfo ? (array)@json_decode($userInfo, true) : [];
-            self::$_user = new User($config);
+            if (!self::$_user instanceof User) {
+                $userInfo    = Yii::$app->session->get($this->SessionKeyUser);
+                $config      = $userInfo ? (array)@json_decode($userInfo, true) : [];
+                self::$_user = new User($config);
+            }
+        } else {
+            if (!self::$_user instanceof User) {
+                self::$_user = new User();
+            }
         }
         return self::$_user;
     }
