@@ -1,6 +1,6 @@
 <?php
 
-namespace jcbowen\EasyWechat5Yii2\WxWork;
+namespace Jcbowen\EasyWechat5Yii2\WxWork;
 
 use yii\base\Component;
 
@@ -9,7 +9,7 @@ use yii\base\Component;
  * Class WxWorkUser
  * @author Bowen
  * @email bowen@jiuchet.com
- * @package jcbowen\EasyWechat5Yii2
+ * @package Jcbowen\EasyWechat5Yii2
  * @lastTime 2022/9/13 1:50 PM
  */
 class User extends Component

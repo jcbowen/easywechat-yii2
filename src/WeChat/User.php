@@ -1,6 +1,6 @@
 <?php
 
-namespace jcbowen\EasyWechat5Yii2\WeChat;
+namespace Jcbowen\EasyWechat5Yii2\WeChat;
 
 use yii\base\Component;
 
@@ -10,7 +10,7 @@ use yii\base\Component;
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2022/9/13 2:29 PM
- * @package jcbowen\EasyWechat5Yii2
+ * @package Jcbowen\EasyWechat5Yii2
  */
 class User extends Component
 {

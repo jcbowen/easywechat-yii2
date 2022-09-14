@@ -1,8 +1,8 @@
 <?php
 
-namespace jcbowen\EasyWechat5Yii2;
+namespace Jcbowen\EasyWechat5Yii2;
 
-use jcbowen\EasyWechat5Yii2\components\Agent;
+use Jcbowen\EasyWechat5Yii2\components\Agent;
 use Exception;
 use Throwable;
 use Yii;
@@ -14,7 +14,7 @@ use yii\base\Component;
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2022/9/13 2:31 PM
- * @package jcbowen\EasyWechat5Yii2
+ * @package Jcbowen\EasyWechat5Yii2
  *
  * @property \EasyWeChat\OfficialAccount\Application $WeChat 微信实例
  * @property \EasyWeChat\Payment\Application $WeChatPay 微信支付实例
@@ -127,7 +127,7 @@ class EasyWeChat extends Component
             switch ($appName) {
                 case 'WeChat':
                 case 'WxWork':
-                    $nameSpace  = '\jcbowen\EasyWechat5Yii2\%s\Main';
+                    $nameSpace  = '\Jcbowen\EasyWechat5Yii2\%s\Main';
                     $nameSpace  = sprintf($nameSpace, $appName);
                     self::$_app = new $nameSpace([
                         'SessionKeyUser'      => $this->SessionKeyUser,

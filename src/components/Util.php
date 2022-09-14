@@ -1,6 +1,6 @@
 <?php
 
-namespace jcbowen\EasyWechat5Yii2\components;
+namespace Jcbowen\EasyWechat5Yii2\components;
 
 use Yii;
 use yii\base\ExitException;

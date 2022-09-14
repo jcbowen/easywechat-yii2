@@ -1,6 +1,6 @@
 <?php
 
-namespace jcbowen\EasyWechat5Yii2\WeChat;
+namespace Jcbowen\EasyWechat5Yii2\WeChat;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
@@ -19,7 +19,7 @@ use yii\web\Response;
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lasttime: 2022/9/13 1:51 PM
- * @package jcbowen\EasyWechat5Yii2\WeChat
+ * @package Jcbowen\EasyWechat5Yii2\WeChat
  * @property User $user
  */
 class Main extends Component
