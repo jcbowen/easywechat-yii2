@@ -1,5 +1,5 @@
 {
-  "name": "jcbowen/yii-easywechat",
+  "name": "jcbowen/easywechat-yii2",
   "description": "WeChat SDK for Yii2 , 基于 w7corp/easywechat 5.x",
   "keywords": [
     "yii",
