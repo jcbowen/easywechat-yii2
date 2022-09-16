@@ -122,9 +122,14 @@ class WeChatSDK extends Component
     /**
      * 初始化SDK
      *
-     * @return WeChat\Main|WxWork\Main|WeChatMiniProgram\Main|bool
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     *
+     * @param ?string $appName 应用名称 ['WeChat', 'WxWork', 'WeChatMiniProgram']
+     * @return false|WeChat\Main|WeChatMiniProgram\Main|WxWork\Main|mixed|string
+     * @lasttime: 2022/9/16 3:14 PM
      */
-    public function app($appName = '')
+    public function app(?string $appName = '')
     {
         $appName        = $appName ?: in_array($this->container, [
             'WeChat',
