@@ -50,7 +50,7 @@ class WeChatSDK extends Component
 
     /**
      * 实例化应用SDK
-     * @var string|WeChat\Main|WxWork\Main
+     * @var string|WeChat\Main|WxWork\Main|WeChatMiniProgram\Main
      */
     private static $_app = 'Not Init';
 
@@ -122,13 +122,14 @@ class WeChatSDK extends Component
     /**
      * 初始化SDK
      *
-     * @return WeChat\Main|WxWork\Main|bool
+     * @return WeChat\Main|WxWork\Main|WeChatMiniProgram\Main|bool
      */
     public function app($appName = '')
     {
         $appName        = $appName ?: in_array($this->container, [
             'WeChat',
-            'WxWork'
+            'WxWork',
+            'WeChatMiniProgram',
         ]);
         $appName4switch = strtolower($appName); // 大小写兼容性处理
         if (!self::$_app || self::$_app === 'Not Init') {
@@ -141,6 +142,13 @@ class WeChatSDK extends Component
                         'SessionKeyUser'      => $this->SessionKeyUser,
                         'SessionKeyReturnUrl' => $this->SessionKeyReturnUrl,
                         'rebinds'             => $this->rebinds,
+                    ]);
+                    break;
+                case 'wechatminiprogram':
+                    $nameSpace  = '\Jcbowen\EasyWechat5Yii2\%s\Main';
+                    $nameSpace  = sprintf($nameSpace, $appName);
+                    self::$_app = new $nameSpace([
+                        'rebinds' => $this->rebinds,
                     ]);
                     break;
                 default:
