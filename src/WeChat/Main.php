@@ -13,7 +13,6 @@ use yii\web\Response;
 
 /**
  * 微信公众号
- * Class Main
  *
  * @author Bowen
  * @email bowen@jiuchet.com

@@ -18,9 +18,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
 /**
- * 企业微信 封装方法
+ * 企业微信
  *
- * Class Main
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2022/9/13 1:50 PM
