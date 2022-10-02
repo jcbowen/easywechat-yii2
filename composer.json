@@ -22,7 +22,7 @@
     "php": ">=7.4",
     "yiisoft/yii2": "^2.0.4",
     "w7corp/easywechat": "^5.0",
-    "jcbowen/jcbase-yii2": "^0.10.4",
+    "jcbowen/jcbase-yii2": "^0.10.4 || @dev",
     "ext-json": "*"
   },
   "autoload": {
