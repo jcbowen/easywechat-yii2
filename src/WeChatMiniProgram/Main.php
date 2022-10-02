@@ -25,6 +25,11 @@ class Main extends Component
     public static $_app = 'Not Init';
 
     /**
+     * @var User
+     */
+    private static $_user = 'Not Init';
+
+    /**
      * @var array
      */
     public array $rebinds = [];
@@ -68,5 +73,21 @@ class Main extends Component
     public function get()
     {
         return self::$_app;
+    }
+
+    /**
+     * 实例化粉丝身份信息
+     *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     * @return User|string
+     * @lasttime: 2022/9/13 2:30 PM
+     */
+    public function getUser($session)
+    {
+        if (!self::$_user instanceof User) {
+            self::$_user = new User($session);
+        }
+        return self::$_user;
     }
 }

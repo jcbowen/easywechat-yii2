@@ -54,11 +54,22 @@ class User extends Component
         parent::init();
     }
 
-    public function decryptData(string $sessionKey, string $iv, string $encrypted): array
+    /**
+     * 解析加密数据
+     *
+     * @author Bowen
+     * @email 3308725087@qq.com
+     *
+     * @param string $iv
+     * @param string $encrypted
+     * @return User|array
+     * @lasttime: 2022/10/2 22:58
+     */
+    public function decryptData(string $iv, string $encrypted)
     {
         $decrypted = AES::decrypt(
             base64_decode($encrypted),
-            base64_decode($sessionKey),
+            base64_decode($this->session_key),
             base64_decode($iv)
         );
 
@@ -68,7 +79,11 @@ class User extends Component
             return [];
         }
 
-        return $decrypted;
+        foreach ($decrypted as $key => $value) {
+            $this->$key = $value;
+        }
+
+        return $this;
     }
 
     /**
