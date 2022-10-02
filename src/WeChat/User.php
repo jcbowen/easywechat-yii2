@@ -60,6 +60,11 @@ class User extends Component
     public int $expires_in;
 
     /**
+     * @var array
+     */
+    public array $token_response;
+
+    /**
      * 数据初始化处理
      *
      * @author Bowen
