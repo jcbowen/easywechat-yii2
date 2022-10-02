@@ -1,9 +1,9 @@
 <?php
 
-namespace Jcbowen\EasyWechat5Yii2;
+namespace Jcbowen\EasyWechatYii2;
 
-use Jcbowen\EasyWechat5Yii2\components\Agent;
 use Exception;
+use Jcbowen\JcbaseYii2\components\Agent;
 use Throwable;
 use Yii;
 use yii\base\Component;
@@ -14,7 +14,7 @@ use yii\base\Component;
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2022/9/13 2:31 PM
- * @package Jcbowen\EasyWechat5Yii2
+ * @package Jcbowen\EasyWechatYii2
  *
  * @property \EasyWeChat\OfficialAccount\Application $WeChat 微信实例
  * @property \EasyWeChat\Payment\Application $WeChatPay 微信支付实例
@@ -141,7 +141,7 @@ class WeChatSDK extends Component
             switch ($appName4switch) {
                 case 'wechat':
                 case 'wxwork':
-                    $nameSpace  = '\Jcbowen\EasyWechat5Yii2\%s\Main';
+                    $nameSpace  = '\Jcbowen\EasyWechatYii2\%s\Main';
                     $nameSpace  = sprintf($nameSpace, $appName);
                     self::$_app = new $nameSpace([
                         'SessionKeyUser'      => $this->SessionKeyUser,
@@ -150,7 +150,7 @@ class WeChatSDK extends Component
                     ]);
                     break;
                 case 'wechatminiprogram':
-                    $nameSpace  = '\Jcbowen\EasyWechat5Yii2\%s\Main';
+                    $nameSpace  = '\Jcbowen\EasyWechatYii2\%s\Main';
                     $nameSpace  = sprintf($nameSpace, $appName);
                     self::$_app = new $nameSpace([
                         'rebinds' => $this->rebinds,

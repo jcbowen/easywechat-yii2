@@ -22,11 +22,12 @@
     "php": ">=7.4",
     "yiisoft/yii2": "^2.0.4",
     "w7corp/easywechat": "^5.0",
+    "jcbowen/jcbase-yii2": "^0.10.4",
     "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
-      "Jcbowen\\EasyWechat5Yii2\\": "./src"
+      "Jcbowen\\EasyWechatYii2\\": "./src"
     }
   },
   "repositories": [

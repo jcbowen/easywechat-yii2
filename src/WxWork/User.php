@@ -1,6 +1,6 @@
 <?php
 
-namespace Jcbowen\EasyWechat5Yii2\WxWork;
+namespace Jcbowen\EasyWechatYii2\WxWork;
 
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
  * Class WxWorkUser
  * @author Bowen
  * @email bowen@jiuchet.com
- * @package Jcbowen\EasyWechat5Yii2
+ * @package Jcbowen\EasyWechatYii2
  * @lastTime 2022/9/13 1:50 PM
  */
 class User extends Component

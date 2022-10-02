@@ -1,6 +1,6 @@
 <?php
 
-namespace Jcbowen\EasyWechat5Yii2\WeChat;
+namespace Jcbowen\EasyWechatYii2\WeChat;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Overtrue\Socialite\Exceptions\AuthorizeFailedException;
@@ -17,7 +17,7 @@ use yii\web\Response;
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lasttime: 2022/9/13 1:51 PM
- * @package Jcbowen\EasyWechat5Yii2\WeChat
+ * @package Jcbowen\EasyWechatYii2\WeChat
  * @property User $user
  */
 class Main extends Component

@@ -1,19 +1,20 @@
 <?php
 
-namespace Jcbowen\EasyWechat5Yii2\WxWork;
+namespace Jcbowen\EasyWechatYii2\WxWork;
 
 use Closure;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use GuzzleHttp\Exception\GuzzleException;
+use Jcbowen\JcbaseYii2\components\ErrCode;
+use Jcbowen\JcbaseYii2\components\Util;
 use Overtrue\Socialite\Exceptions\AuthorizeFailedException;
 use Yii;
 use yii\base\Component;
 use EasyWeChat\Factory;
 use EasyWeChat\Work\Application;
 use EasyWeChat\Kernel\Messages\TextCard;
-use Jcbowen\EasyWechat5Yii2\components\Util;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
@@ -23,7 +24,7 @@ use yii\web\Response;
  * @author Bowen
  * @email bowen@jiuchet.com
  * @lastTime 2022/9/13 1:50 PM
- * @package Jcbowen\EasyWechat5Yii2\wechat
+ * @package Jcbowen\EasyWechatYii2\wechat
  *
  * @property User $user
  */
@@ -126,7 +127,7 @@ class Main extends Component
             $this->setReturnUrl(Yii::$app->request->getUrl());
             return Yii::$app->response->redirect(self::$_app->oauth->redirect(Yii::$app->request->absoluteUrl));
         }
-        return Util::result(1, '未知错误');
+        return (new Util)->result(ErrCode::UNKNOWN, '未知错误');
     }
 
 
