@@ -3,6 +3,7 @@
 namespace Jcbowen\EasyWechat5Yii2\WeChat;
 
 use yii\base\Component;
+use yii\helpers\ArrayHelper;
 
 /**
  *
@@ -79,10 +80,10 @@ class User extends Component
 
     /**
      *
-     * @return string
-     * @lasttime: 2022/9/13 2:29 PM
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @return string
+     * @lasttime: 2022/9/13 2:29 PM
      */
     public function getOpenId(): string
     {
@@ -91,13 +92,28 @@ class User extends Component
 
     /**
      *
-     * @return string
-     * @lasttime: 2022/9/13 2:29 PM
      * @author Bowen
      * @email bowen@jiuchet.com
+     * @return string
+     * @lasttime: 2022/9/13 2:29 PM
      */
     public function getUnionid(): string
     {
         return $this->raw['unionid'] ?? '';
+    }
+
+    /**
+     *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     *
+     * @param array $properties
+     * @param bool $recursive
+     * @return array
+     * @lasttime: 2022/10/2 14:31
+     */
+    public function toArray(array $properties = [], bool $recursive = true): array
+    {
+        return ArrayHelper::toArray($this, $properties, $recursive);
     }
 }
