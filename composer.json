@@ -30,16 +30,21 @@
       "Jcbowen\\EasyWechatYii2\\": "./src"
     }
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://asset-packagist.org"
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.x-dev"
     }
-  ],
+  },
   "config": {
     "allow-plugins": {
       "easywechat-composer/easywechat-composer": true,
       "yiisoft/yii2-composer": true
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ]
 }
