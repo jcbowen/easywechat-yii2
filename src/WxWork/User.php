@@ -3,6 +3,7 @@
 namespace Jcbowen\EasyWechat5Yii2\WxWork;
 
 use yii\base\Component;
+use yii\helpers\ArrayHelper;
 
 /**
  *
@@ -55,5 +56,20 @@ class User extends Component
     public function init()
     {
         parent::init();
+    }
+
+    /**
+     *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     *
+     * @param array $properties
+     * @param bool $recursive
+     * @return array
+     * @lasttime: 2022/10/2 14:31
+     */
+    public function toArray(array $properties = [], bool $recursive = true): array
+    {
+        return ArrayHelper::toArray($this, $properties, $recursive);
     }
 }
