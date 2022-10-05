@@ -3,7 +3,7 @@
 namespace Jcbowen\EasyWechatYii2\WeChatMiniProgram;
 
 use EasyWeChat\Kernel\Support\AES;
-use yii\base\Component;
+use Jcbowen\JcbaseYii2\components\Component;
 use yii\helpers\ArrayHelper;
 
 /**
