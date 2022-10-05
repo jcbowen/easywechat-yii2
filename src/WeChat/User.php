@@ -87,7 +87,7 @@ class User extends Component
      */
     public function getOpenId(): string
     {
-        return $this->raw['openid'] ?? '';
+        return $this->raw['openid'] ?: '';
     }
 
     /**
@@ -99,7 +99,7 @@ class User extends Component
      */
     public function getUnionid(): string
     {
-        return $this->raw['unionid'] ?? '';
+        return $this->raw['unionid'] ?: '';
     }
 
     /**
