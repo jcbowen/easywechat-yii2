@@ -91,6 +91,32 @@ class User extends Component
      * @author Bowen
      * @email bowen@jiuchet.com
      *
+     * @return string
+     * @lasttime: 2022/10/9 16:40
+     */
+    public function getOpenid(): string
+    {
+        return $this->openid ?? '';
+    }
+
+    /**
+     *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     *
+     * @return string
+     * @lasttime: 2022/10/9 16:41
+     */
+    public function getUnionid(): string
+    {
+        return $this->unionid ?? '';
+    }
+
+    /**
+     *
+     * @author Bowen
+     * @email bowen@jiuchet.com
+     *
      * @param array $properties
      * @param bool $recursive
      * @return array
