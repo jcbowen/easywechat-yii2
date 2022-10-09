@@ -3,7 +3,7 @@
 namespace Jcbowen\EasyWechatYii2\WeChatMiniProgram;
 
 use EasyWeChat\Kernel\Support\AES;
-use Jcbowen\JcbaseYii2\components\Component;
+use Jcbowen\EasyWechatYii2\components\Component;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -48,11 +48,6 @@ class User extends Component
 
     /** @var array|null */
     public ?array $watermark;
-
-    public function init()
-    {
-        parent::init();
-    }
 
     /**
      * 解析加密数据

@@ -3,7 +3,7 @@
 namespace Jcbowen\EasyWechatYii2;
 
 use Exception;
-use Jcbowen\JcbaseYii2\components\Agent;
+use Jcbowen\EasyWechatYii2\components\Agent;
 use Throwable;
 use Yii;
 use yii\base\Component;

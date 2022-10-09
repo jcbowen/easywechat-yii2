@@ -2,7 +2,7 @@
 
 namespace Jcbowen\EasyWechatYii2\WxWork;
 
-use Jcbowen\JcbaseYii2\components\Component;
+use Jcbowen\EasyWechatYii2\components\Component;
 use yii\helpers\ArrayHelper;
 
 /**

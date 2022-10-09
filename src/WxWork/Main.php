@@ -7,8 +7,8 @@ use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use GuzzleHttp\Exception\GuzzleException;
-use Jcbowen\JcbaseYii2\components\ErrCode;
-use Jcbowen\JcbaseYii2\components\Util;
+use Jcbowen\EasyWechatYii2\components\ErrCode;
+use Jcbowen\EasyWechatYii2\components\Util;
 use Overtrue\Socialite\Exceptions\AuthorizeFailedException;
 use Yii;
 use yii\base\Component;
@@ -255,7 +255,7 @@ class Main extends Component
      */
     public function sendText(string $msg, string $to)
     {
-        $messager = $this->getApp()->messenger;
+        $messager = $this->get()->messenger;
         return $messager->message($msg)->toUser($to)->send();
     }
 
@@ -278,7 +278,7 @@ class Main extends Component
      */
     public function sendCard(array $msg, string $to)
     {
-        $messenger = $this->getApp()->messenger;
+        $messenger = $this->get()->messenger;
 
         $message = new TextCard($msg);
 

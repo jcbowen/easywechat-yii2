@@ -2,7 +2,7 @@
 
 namespace Jcbowen\EasyWechatYii2\WeChat;
 
-use Jcbowen\JcbaseYii2\components\Component;
+use Jcbowen\EasyWechatYii2\components\Component;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -64,19 +64,6 @@ class User extends Component
      * @var array
      */
     public array $token_response;
-
-    /**
-     * 数据初始化处理
-     *
-     * @author Bowen
-     * @email bowen@jiuchet.com
-     *
-     * @lasttime: 2022/9/13 2:29 PM
-     */
-    public function init()
-    {
-        parent::init();
-    }
 
     /**
      *
