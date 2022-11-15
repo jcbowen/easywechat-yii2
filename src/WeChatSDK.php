@@ -131,8 +131,8 @@ class WeChatSDK extends Component
      */
     public function app(?string $appName = '')
     {
-        $appName        = $appName ?: $this->container;
-        $appName        = in_array($appName, ['WeChat', 'WxWork', 'WeChatMiniProgram'], true) ? $appName : 'WeChat';
+        $appName = $appName ?: $this->container;
+        $appName = in_array($appName, ['WeChat', 'WxWork', 'WeChatMiniProgram'], true) ? $appName : 'WeChat';
 
         $appName4switch = strtolower($appName); // 大小写兼容性处理
         if (!self::$_app || self::$_app === 'Not Init') {
