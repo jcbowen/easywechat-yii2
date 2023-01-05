@@ -49,6 +49,8 @@ class User extends Component
     /** @var array|null */
     public ?array $watermark;
 
+    public $is_demote;
+
     /**
      * 解析加密数据
      *
