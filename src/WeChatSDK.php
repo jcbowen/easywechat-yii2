@@ -50,9 +50,9 @@ class WeChatSDK extends Component
 
     /**
      * 实例化应用SDK
-     * @var string|WeChat\Main|WxWork\Main|WeChatMiniProgram\Main
+     * @var WeChat\Main|WxWork\Main|WeChatMiniProgram\Main
      */
-    private static $_app = 'Not Init';
+    private static $_app;
 
     public function init()
     {
@@ -134,31 +134,31 @@ class WeChatSDK extends Component
         $appName = $appName ?: $this->container;
         $appName = in_array($appName, ['WeChat', 'WxWork', 'WeChatMiniProgram'], true) ? $appName : 'WeChat';
 
-        $appName4switch = strtolower($appName); // 大小写兼容性处理
-        if (!self::$_app || self::$_app === 'Not Init') {
-            switch ($appName4switch) {
-                case 'wechat':
-                case 'wxwork':
+        if (!self::$_app || !self::$_app[$appName]) {
+            switch ($appName) {
+                case 'WeChat':
+                case 'WxWork':
                     $nameSpace  = '\Jcbowen\EasyWechatYii2\%s\Main';
                     $nameSpace  = sprintf($nameSpace, $appName);
-                    self::$_app = new $nameSpace([
+                    self::$_app[$appName] = new $nameSpace([
                         'SessionKeyUser'      => $this->SessionKeyUser,
                         'SessionKeyReturnUrl' => $this->SessionKeyReturnUrl,
                         'rebinds'             => $this->rebinds,
                     ]);
                     break;
-                case 'wechatminiprogram':
+                case 'WeChatMiniProgram':
                     $nameSpace  = '\Jcbowen\EasyWechatYii2\%s\Main';
                     $nameSpace  = sprintf($nameSpace, $appName);
-                    self::$_app = new $nameSpace([
+                    self::$_app[$appName] = new $nameSpace([
                         'rebinds' => $this->rebinds,
                     ]);
                     break;
                 default:
-                    self::$_app = null;
+                    self::$_app[$appName] = null;
             }
         }
-        return self::$_app ?: false;
+
+        return self::$_app[$appName] ?? false;
     }
 
     /**
@@ -173,25 +173,25 @@ class WeChatSDK extends Component
     {
         $checkArr = [
             'WeChat'              => [// 微信公众号
-                'checkKey' => 'secret',
+                                      'checkKey' => 'secret',
             ],
             'WeChatPay'           => [// 微信支付
-                'checkKey' => 'key',
+                                      'checkKey' => 'key',
             ],
             'WeChatMiniProgram'   => [// 微信小程序
-                'checkKey' => 'secret',
+                                      'checkKey' => 'secret',
             ],
             'WeChatOpenPlatform'  => [// 微信开放平台
-                'checkKey' => 'secret',
+                                      'checkKey' => 'secret',
             ],
             'WxWork'              => [// 企业微信
-                'checkKey' => 'secret',
+                                      'checkKey' => 'secret',
             ],
             'WeChatOpenWork'      => [// 企业微信开放平台
-                'checkKey' => 'secret',
+                                      'checkKey' => 'secret',
             ],
             'WeChatMicroMerchant' => [// 小微商户
-                'checkKey' => 'secret',
+                                      'checkKey' => 'secret',
             ]
         ];
 
