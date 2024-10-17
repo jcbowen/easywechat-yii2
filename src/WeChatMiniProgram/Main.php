@@ -3,15 +3,14 @@
 namespace Jcbowen\EasyWechatYii2\WeChatMiniProgram;
 
 use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
-use EasyWeChat\MiniProgram\Application;
+use Jcbowen\EasyWechatYii2\Factory;
 use Yii;
 use yii\base\Component;
-use EasyWeChat\Factory;
 
 /**
  * 微信小程序
  *
- * @author Bowen
+ * @author  Bowen
  * @email bowen@jiuchet.com
  * @lasttime: 2022/9/16 2:53 PM
  * @package Jcbowen\EasyWechatYii2\WeChatMiniProgram
@@ -36,7 +35,7 @@ class Main extends Component
 
     /**
      *
-     * @author Bowen
+     * @author  Bowen
      * @email bowen@jiuchet.com
      *
      * @throws InvalidConfigException
@@ -64,7 +63,7 @@ class Main extends Component
     /**
      * 获取微信小程序实例
      *
-     * @author Bowen
+     * @author  Bowen
      * @email bowen@jiuchet.com
      *
      * @return Application|string
@@ -78,7 +77,7 @@ class Main extends Component
     /**
      * 实例化粉丝身份信息
      *
-     * @author Bowen
+     * @author  Bowen
      * @email bowen@jiuchet.com
      * @return User|string
      * @lasttime: 2022/9/13 2:30 PM
