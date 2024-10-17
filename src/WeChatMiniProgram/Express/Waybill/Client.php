@@ -17,7 +17,7 @@ class Client extends BaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function listProviders()
+    public function getDeliveryList()
     {
         return $this->httpPostJson('cgi-bin/express/delivery/open_msg/get_delivery_list', []);
     }
